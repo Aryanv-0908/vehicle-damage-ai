@@ -1,6 +1,16 @@
+from ultralytics import YOLO
+model = YOLO("yolov8n.pt")
+
 def run_detection(image_path):
-    # Abhi dummy return kar rahe hain (model baad me add karenge)
-    return [
-        {"type": "scratch", "confidence": 0.8},
-        {"type": "dent", "confidence": 0.6}
-    ]
+    results = model(image_path)
+
+    detections = []
+
+    for r in results:
+        for box in r.boxes:
+            detections.append({
+                "class": int(box.cls),
+                "confidence": float(box.conf)
+            })
+
+    return detections
